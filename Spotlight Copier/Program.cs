@@ -5,7 +5,6 @@ using System.Drawing;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Security.Cryptography;
-using System.Diagnostics.CodeAnalysis;
 
 using Console = Colorful.Console;
 
@@ -270,8 +269,7 @@ namespace Spotlight_Copier
         }
         
     }
-
-    [SuppressMessage("ReSharper", "InconsistentNaming")]
+    
     public static class CustomSearcher
     {
         public static IEnumerable<string> GetDirectories(string Path, string SearchPattern = "*", SearchOption SearchOptionList = SearchOption.TopDirectoryOnly)
