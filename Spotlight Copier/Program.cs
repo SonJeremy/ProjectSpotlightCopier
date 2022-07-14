@@ -11,25 +11,19 @@ using Console = Colorful.Console;
 
 namespace Spotlight_Copier
 {
-    [SuppressMessage("ReSharper", "TooWideLocalVariableScope")]
-    [SuppressMessage("ReSharper", "InconsistentNaming")]
     internal static class Program
     {
-        private static void Main(string[] args)
+        private static void Main()
         {
             Console.Title = $"SPC v{Assembly.GetExecutingAssembly().GetName().Version}";
 
             #region Default Config
 
-            string HashInfo;
             string AutoExit;
-            Image ImageInfo;
-            
+
             var ManualSaveLoop = 3;
             var SpotlightPath = "";
-            string ChecksumHashInfo;
-            var ChecksumFailed = false;
-            
+
             var SavedColor = Color.FromArgb(0, 148, 50);
             var ErrorColor = Color.FromArgb(234, 32, 39);
             var WarningColor = Color.FromArgb(255, 121, 63);
@@ -131,9 +125,9 @@ namespace Spotlight_Copier
 
             foreach (var Wall in WallPath)
             {
-                ChecksumFailed = false;
+                var ChecksumFailed = false;
                 var SaveFileFullPath = "";
-                ImageInfo = Image.FromFile(Wall);
+                var ImageInfo = Image.FromFile(Wall);
 
                 Console.WriteLine($"Processing {CurrentFileIndex} In Total {MaxFileIndex} Files...");
                 CurrentFileIndex++;
@@ -144,15 +138,15 @@ namespace Spotlight_Copier
                 Console.WriteLine(" Validated.!", WarningColor);
                 Console.WriteLine();
 
-                HashInfo = Checksum(File.OpenRead(Wall));
+                var HashInfo = Checksum(File.OpenRead(Wall));
                 
                 Console.WriteLine("    Checking File Exist By Hash Integrity...", CheckingColor);
             
-                if (HashArray == null || HashArray.Count == 0)
+                if (HashArray.Count == 0)
                 {
                     foreach (var SavedFile in SavedFilePath)
                     {
-                        ChecksumHashInfo = Checksum(File.OpenRead(SavedFile));
+                        var ChecksumHashInfo = Checksum(File.OpenRead(SavedFile));
 
                         var CurrentFileInfo = new FileInfo(SavedFile);
 
@@ -164,9 +158,8 @@ namespace Spotlight_Copier
                         {
                             if (Error.HResult != -2147024809) continue;
 
-                            var Dupliacated = "";
-                            HashArray.TryGetValue(ChecksumHashInfo, out Dupliacated);
-                            Console.WriteLine($"      - Found Duplicate File {Dupliacated} With {CurrentFileInfo.Name}", CheckingColor);
+                            HashArray.TryGetValue(ChecksumHashInfo, out var Duplicated);
+                            Console.WriteLine($"      - Found Duplicate File {Duplicated} With {CurrentFileInfo.Name}", CheckingColor);
 
                             Console.Write(Environment.NewLine);
                         }
@@ -197,7 +190,7 @@ namespace Spotlight_Copier
                     {
                         Console.Write("      Saving File...", WarningColor);
                         
-                        SaveFileFullPath = SavePath + FileName + "_Horizontal_" + RandomString(8) + ".jpg";
+                        SaveFileFullPath = $"{SavePath}{FileName}_Horizontal_{RandomString(8)}.jpg";
                         
                         File.Copy(Wall, SaveFileFullPath, false);
                     }
@@ -205,7 +198,7 @@ namespace Spotlight_Copier
                     {
                         Console.Write(" Duplicated.! Saving File With Other Name...", ErrorColor);
                         
-                        SaveFileFullPath = SavePath + FileName + "_Horizontal_" + RandomString(16) + ".jpg";
+                        SaveFileFullPath = $"{SavePath}{FileName}_Horizontal_{RandomString(16)}.jpg";
                         
                         File.Copy(Wall, SaveFileFullPath, false);
                     }
@@ -224,7 +217,7 @@ namespace Spotlight_Copier
                     {
                         Console.Write("      Saving File...", WarningColor);
 
-                        SaveFileFullPath = SavePath + FileName + "_Vertical_" + RandomString(8) + ".jpg";
+                        SaveFileFullPath = $"{SavePath}{FileName}_Vertical_{RandomString(8)}.jpg";
 
                         File.Copy(Wall, SaveFileFullPath, false);
                     }
@@ -232,7 +225,7 @@ namespace Spotlight_Copier
                     {
                         Console.Write(" Duplicated.! Saving File With Other Name...", ErrorColor);
 
-                        SaveFileFullPath = SavePath + FileName + "_Vertical_" + RandomString(8) + ".jpg";
+                        SaveFileFullPath = $"{SavePath}{FileName}_Vertical_{RandomString(8)}.jpg";
 
                         File.Copy(Wall, SaveFileFullPath, false);
                     }
@@ -289,7 +282,7 @@ namespace Spotlight_Copier
             var Directories = new List<string>(GetDirectories(Path, SearchPattern));
 
             for (var Loop = 0; Loop < Directories.Count; Loop++)
-                Directories.AddRange(GetDirectories(Directories[Loop], SearchPattern));
+                Directories.AddRange(GetDirectories(Directories[index: Loop], SearchPattern));
 
             return Directories;
         }
