@@ -118,6 +118,7 @@ namespace Spotlight_Copier
             var WallPath = Directory.GetFiles(SpotlightPath, "*", SearchOption.TopDirectoryOnly);
             var SavedFilePath = Directory.GetFiles(SavePath, "*", SearchOption.TopDirectoryOnly);
 
+            var SavedNewWall = 0;
             var CurrentFileIndex = 1;
             var MaxFileIndex = WallPath.Length;
             var HashArray = new Dictionary<string, string>();
@@ -204,7 +205,10 @@ namespace Spotlight_Copier
                     finally
                     {
                         if (SaveFileFullPath != "" && File.Exists(SaveFileFullPath))
+                        {
                             Console.WriteLine($" Saved.! {Environment.NewLine}", SavedColor);
+                            SavedNewWall++;
+                        }
                         else
                             Console.WriteLine($" Fail.! {Environment.NewLine}", ErrorColor);
                     }
@@ -238,7 +242,17 @@ namespace Spotlight_Copier
                 }
             }
 
-            Console.WriteLine("Done.!", SavedColor);
+            if (SavedNewWall > 0)
+            {
+                Console.Write($"Done.! Saving ", SavedColor);
+                
+                Console.Write(SavedNewWall, WarningColor);
+                
+                Console.WriteLine(" Spotlight Copies.", SavedColor);
+            }
+            else
+                Console.WriteLine("Done.! No New File Was Copied.!", ErrorColor);
+            
 
             Console.ReadKey();
 
