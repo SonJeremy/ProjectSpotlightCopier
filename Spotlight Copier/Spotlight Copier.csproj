@@ -71,26 +71,39 @@
     <ApplicationIcon>copy.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Colorful.Console">
-      <HintPath>..\packages\Colorful.Console.1.2.15\lib\net45\Colorful.Console.dll</HintPath>
-    </Reference>
     <Reference Include="Colorful.Console, Version=1.2.15.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Colorful.Console.1.2.15\lib\net45\Colorful.Console.dll</HintPath>
       <EmbedAssembly>true</EmbedAssembly>
       <Private>False</Private>
     </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System">
+      <EmbedAssembly>true</EmbedAssembly>
+    </Reference>
+    <Reference Include="System.Core">
+      <EmbedAssembly>true</EmbedAssembly>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <EmbedAssembly>true</EmbedAssembly>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <EmbedAssembly>true</EmbedAssembly>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <EmbedAssembly>true</EmbedAssembly>
+    </Reference>
+    <Reference Include="Microsoft.CSharp">
+      <EmbedAssembly>true</EmbedAssembly>
+    </Reference>
     <Reference Include="System.Data">
       <EmbedInteropTypes>False</EmbedInteropTypes>
       <EmbedAssembly>true</EmbedAssembly>
     </Reference>
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
+    <Reference Include="System.Net.Http">
+      <EmbedAssembly>true</EmbedAssembly>
+    </Reference>
+    <Reference Include="System.Xml">
+      <EmbedAssembly>true</EmbedAssembly>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
