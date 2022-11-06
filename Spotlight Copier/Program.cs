@@ -125,8 +125,8 @@ namespace Spotlight_Copier
 
             foreach (var Wall in WallPath)
             {
-                var ChecksumFailed = false;
                 var SaveFileFullPath = "";
+                var ChecksumFailed = false;
                 var ImageInfo = Image.FromFile(Wall);
 
                 Console.WriteLine($"Processing {CurrentFileIndex} In Total {MaxFileIndex} Files...");
@@ -181,8 +181,8 @@ namespace Spotlight_Copier
 
                 if (ChecksumFailed)
                     continue;
-                else
-                    Console.WriteLine($"      Hash Integrity Passed.!", WarningColor);
+                
+                Console.WriteLine($"      Hash Integrity Passed.!", WarningColor);
 
                 if (ImageInfo.Width >= 1920)
                 {
@@ -196,11 +196,19 @@ namespace Spotlight_Copier
                     }
                     catch
                     {
+                        HorizontalFileDuplicated:
                         Console.Write(" Duplicated.! Saving File With Other Name...", ErrorColor);
                         
                         SaveFileFullPath = $"{SavePath}{FileName}_Horizontal_{RandomString(16)}.jpg";
-                        
-                        File.Copy(Wall, SaveFileFullPath, false);
+
+                        try
+                        {
+                            File.Copy(Wall, SaveFileFullPath, false);
+                        }
+                        catch (Exception)
+                        {
+                            goto HorizontalFileDuplicated;
+                        }
                     }
                     finally
                     {
@@ -226,16 +234,27 @@ namespace Spotlight_Copier
                     }
                     catch
                     {
+                        VerticalFileDuplicated:
                         Console.Write(" Duplicated.! Saving File With Other Name...", ErrorColor);
 
-                        SaveFileFullPath = $"{SavePath}{FileName}_Vertical_{RandomString(8)}.jpg";
+                        SaveFileFullPath = $"{SavePath}{FileName}_Vertical_{RandomString(16)}.jpg";
 
-                        File.Copy(Wall, SaveFileFullPath, false);
+                        try
+                        {
+                            File.Copy(Wall, SaveFileFullPath, false);
+                        }
+                        catch (Exception)
+                        {
+                            goto VerticalFileDuplicated;
+                        }
                     }
                     finally
                     {
                         if (SaveFileFullPath != "" && File.Exists(SaveFileFullPath))
+                        {
                             Console.WriteLine($" Saved.! {Environment.NewLine}", SavedColor);
+                            SavedNewWall++;
+                        }
                         else
                             Console.WriteLine($" Fail.! {Environment.NewLine}", ErrorColor);
                     }
@@ -253,7 +272,6 @@ namespace Spotlight_Copier
             else
                 Console.WriteLine("Done.! No New File Was Copied.!", ErrorColor);
             
-
             Console.ReadKey();
 
             if (AutoExit == "1") Environment.Exit(0); else { Console.WriteLine("Press Any Key To Exist.!", WarningColor); Console.ReadKey(); }

@@ -32,5 +32,6 @@ using System.Runtime.CompilerServices;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2022.7.20.1")]
-[assembly: AssemblyFileVersion("2022.7.20.1")]
+// [assembly: AssemblyVersion("Year.Month.Day.BugOrFeatureFixOrAdded")]
+[assembly: AssemblyVersion("2022.11.07.2")]
+[assembly: AssemblyFileVersion("2022.11.07.2")]
