@@ -33,5 +33,5 @@ using System.Runtime.CompilerServices;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 // [assembly: AssemblyVersion("Year.Month.Day.BugOrFeatureFixOrAdded")]
-[assembly: AssemblyVersion("2022.11.07.2")]
-[assembly: AssemblyFileVersion("2022.11.07.2")]
+[assembly: AssemblyVersion("2024.1.3.1")]
+[assembly: AssemblyFileVersion("2024.1.3.1")]

@@ -20,6 +20,7 @@ namespace Spotlight_Copier
 
             string AutoExit;
 
+            var AutoRemoveDuplicated = false;
             var ManualSaveLoop = 3;
             var SpotlightPath = "";
 
@@ -35,8 +36,15 @@ namespace Spotlight_Copier
             {
                 AutoExit = Environment.GetEnvironmentVariable("LMSQSPCAutoExit", EnvironmentVariableTarget.User);
             }
-            catch (Exception) { AutoExit = "0"; } 
-            
+            catch (Exception) { AutoExit = "0"; }
+
+            try
+            {
+                AutoRemoveDuplicated = (Environment.GetEnvironmentVariable("LMSQSPCAutoRemoveDuplicated", EnvironmentVariableTarget.User) == "1") ? true : false;
+                AutoRemoveDuplicated = true;
+            }
+            catch (Exception) { AutoRemoveDuplicated = true; }
+
             if (!Directory.Exists(SavePath))
             {
                 Console.WriteLine("Directory Does Not Exist. Creating...", WarningColor);
@@ -138,15 +146,20 @@ namespace Spotlight_Copier
                 Console.WriteLine(" Validated.!", WarningColor);
                 Console.WriteLine();
 
-                var HashInfo = Checksum(File.OpenRead(Wall));
-                
+                var DataStream = File.OpenRead(Wall);
+                var HashInfo = Checksum(DataStream);
+                DataStream.Dispose();
+
                 Console.WriteLine("    Checking File Exist By Hash Integrity...", CheckingColor);
             
                 if (HashArray.Count == 0)
                 {
                     foreach (var SavedFile in SavedFilePath)
                     {
-                        var ChecksumHashInfo = Checksum(File.OpenRead(SavedFile));
+                        DataStream = File.OpenRead(SavedFile);
+                        var ChecksumHashInfo = Checksum(DataStream);
+
+                        DataStream.Dispose();
 
                         var CurrentFileInfo = new FileInfo(SavedFile);
 
@@ -161,7 +174,24 @@ namespace Spotlight_Copier
                             HashArray.TryGetValue(ChecksumHashInfo, out var Duplicated);
                             Console.WriteLine($"      - Found Duplicate File {Duplicated} With {CurrentFileInfo.Name}", CheckingColor);
 
-                            Console.Write(Environment.NewLine);
+                            if (AutoRemoveDuplicated == true)
+                            {
+                                Console.WriteLine($"      - Auto Remove Duplicate Enabled.", CheckingColor);
+                                
+                                try
+                                {
+                                    File.Delete(SavedFile);
+                                    Console.WriteLine($"      - Removed.", SavedColor);
+                                }
+                                catch (Exception AutoRemoveError)
+                                {
+                                    Console.WriteLine($"      - Error: {AutoRemoveError.Message}." , SavedColor);
+                                }
+                                finally
+                                {
+                                    Console.Write(Environment.NewLine);
+                                }
+                            }
                         }
 
                         if (ChecksumHashInfo != HashInfo) continue;
@@ -272,9 +302,16 @@ namespace Spotlight_Copier
             else
                 Console.WriteLine("Done.! No New File Was Copied.!", ErrorColor);
             
-            Console.ReadKey();
 
-            if (AutoExit == "1") Environment.Exit(0); else { Console.WriteLine("Press Any Key To Exist.!", WarningColor); Console.ReadKey(); }
+            if (AutoExit == "1")
+            {
+                System.Threading.Thread.Sleep(1500);
+            }
+            else 
+            { 
+                Console.WriteLine("Press Any Key To Exist.!", WarningColor); 
+                Console.ReadKey(); 
+            }
 
             Environment.Exit(1);
         }
